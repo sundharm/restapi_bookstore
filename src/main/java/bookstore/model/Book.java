@@ -1,5 +1,7 @@
 package bookstore.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +17,9 @@ public class Book {
 	
 	@Column(name="author_name")
 	private String authorName;
+	
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	private Set<Category> categories;
 	
 	public Book() {
 		

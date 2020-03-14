@@ -12,6 +12,10 @@ public class Category {
 	
 	@Column(name = "category_name")
 	private String categoryName;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "book_id")
+	private Book book;
 
 	public Category(int id, String categoryName) {
 		this.id = id;
