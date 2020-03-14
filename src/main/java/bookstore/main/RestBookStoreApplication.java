@@ -9,5 +9,4 @@ public class RestBookStoreApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RestBookStoreApplication.class, args);
 	}
-
 }

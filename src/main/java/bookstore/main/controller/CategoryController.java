@@ -1,4 +1,4 @@
-package bookstore.controller;
+package bookstore.main.controller;
 
 public class CategoryController {
 

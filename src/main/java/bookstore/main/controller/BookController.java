@@ -1,7 +1,7 @@
-package bookstore.controller;
+package bookstore.main.controller;
 
-import bookstore.model.Book;
-import bookstore.repos.BookRepository;
+import bookstore.main.model.Book;
+import bookstore.main.repos.BookRepository;
 
 import java.util.List;
 

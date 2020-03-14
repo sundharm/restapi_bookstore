@@ -1,7 +1,8 @@
-package bookstore.repos;
+package bookstore.main.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import bookstore.model.Category;
+
+import bookstore.main.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 

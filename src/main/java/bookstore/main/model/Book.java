@@ -1,4 +1,4 @@
-package bookstore.model;
+package bookstore.main.model;
 
 import java.util.Set;
 
@@ -12,10 +12,10 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="book_name")
+	@Column(name="bookName")
 	private String bookName;
 	
-	@Column(name="author_name")
+	@Column(name="authorName")
 	private String authorName;
 	
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
@@ -26,7 +26,6 @@ public class Book {
 	}
 	
 	public Book(int id, String bookName, String authorName) {
-		this.id = id;
 		this.bookName = bookName;
 		this.authorName = authorName;
 	}
