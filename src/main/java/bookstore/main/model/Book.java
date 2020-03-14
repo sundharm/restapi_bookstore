@@ -18,7 +18,7 @@ public class Book {
 	@Column(name="authorName")
 	private String authorName;
 	
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Category> categories;
 	
 	public Book() {
@@ -52,6 +52,14 @@ public class Book {
 
 	public void setAuthorName(String authorName) {
 		this.authorName = authorName;
+	}
+	
+	public void setCategory(Set<Category> categories) {
+		this.categories=categories;
+	}
+	
+	public Set<Category> getCategory(){
+		return this.categories;
 	}
 
 }

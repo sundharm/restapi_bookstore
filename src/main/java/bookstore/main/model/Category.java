@@ -13,12 +13,15 @@ public class Category {
 	@Column(name = "category_name")
 	private String categoryName;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "book_id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "book_id", nullable = false)
 	private Book book;
+	
+	public Category() {
+		
+	}
 
 	public Category(int id, String categoryName) {
-		this.id = id;
 		this.categoryName = categoryName;
 	}
 
@@ -38,4 +41,11 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 	
+	public void setBook(Book book) {
+		this.book = book;
+	}
+	
+	public Book getBook() {
+		return this.book;
+	}
 }
