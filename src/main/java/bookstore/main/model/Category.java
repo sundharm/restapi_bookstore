@@ -2,8 +2,12 @@ package bookstore.main.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="categories")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class Category {
 	
 	@Id
@@ -15,6 +19,7 @@ public class Category {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "book_id", nullable = false)
+	@JsonIgnore
 	private Book book;
 	
 	public Category() {
