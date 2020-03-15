@@ -17,8 +17,8 @@ public class Category {
 	@Column(name = "category_name")
 	private String categoryName;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "book_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "book_id")
 	@JsonIgnore
 	private Book book;
 	

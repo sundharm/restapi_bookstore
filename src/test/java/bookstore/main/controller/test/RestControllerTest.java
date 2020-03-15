@@ -98,12 +98,10 @@ public class RestControllerTest {
 
         Book newBook = new Book(1,"Java Programming", "Javaman");
         when(mockRepository.save(any(Book.class))).thenReturn(newBook);
-  
         mockMvc.perform(post("/api/book")
                 .content(om.writeValueAsString(newBook))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        
+                .andExpect(status().isOk());       
         verify(mockRepository, times(1)).save(any(Book.class));
 
     }
@@ -115,18 +113,15 @@ public class RestControllerTest {
         
         Category category = new Category(1, "cat1");
         when(mockRepository1.save(any(Category.class))).thenReturn(category);
-        
-        System.out.println(newBook.toString());
+       
         mockMvc.perform(post("/api/book")
                 .content(om.writeValueAsString(newBook)));
-        
         mockMvc.perform(post("/api/book/1/category")
                 .content(om.writeValueAsString(category))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.categoryName", is("cat1")));
-        
+                .andExpect(jsonPath("$.categoryName", is("cat1")));  	
         verify(mockRepository1, times(1)).save(any(Category.class));
     }
     
