@@ -23,6 +23,7 @@ public class CategoryController {
 	@Autowired
 	private BookRepository bookRepo;
 	
+	//End point to add a category using book id to assign book with the category
 	@PostMapping("/book/{book_id}/category")
 	public Category addCategory(@PathVariable int book_id, @RequestBody Category category) {
 		return bookRepo.findById(book_id).map(book->{
@@ -32,10 +33,12 @@ public class CategoryController {
 	
 	}
 	
+	//End point to delete category using category ID, from a book given the book ID
 	@DeleteMapping("/book/{book_id}/category/{category_id}")
     public String deleteCategory(@PathVariable int book_id,
                                    @PathVariable int category_id) {
 		
+		//Return book not found if the book with given ID cannot be found
         if(!bookRepo.existsById(book_id)) {
             throw new NotFoundException("Book not found!");
         }       

@@ -18,6 +18,8 @@ public class Book {
 	@Column(name="authorName")
 	private String authorName;
 	
+	//One to many bidirectional relationship between book and category
+	//Each book can have a set of categories
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Category> categories;
 	

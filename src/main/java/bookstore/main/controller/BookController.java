@@ -25,14 +25,17 @@ public class BookController {
 	@Autowired
 	private BookRepository bookRepo;
 	
+	//End point to add a single book
 	@PostMapping("/book")
 	public String addBook(@RequestBody Book book) {
 		bookRepo.save(book);
 		return "Book saved successfully";
 	}
 	
+	//End point to search for a book using book ID
     @GetMapping("/book/{id}")
     public Book getBookByID(@PathVariable int id) {
+    	//using optional to find if a book record is present
     	Optional<Book> optionalBook = bookRepo.findById(id);
     	if(optionalBook.isPresent()) {
     		return optionalBook.get();
@@ -41,19 +44,23 @@ public class BookController {
     	}
     }
 	
+    //End point to get all books
 	@GetMapping("/books")
 	public List<Book> getBooks() {
 		return bookRepo.findAll();
 	}
 	
-	 @PostMapping("/books")
-	 public String addBooks(@RequestBody List<Book> bookList){
-	    bookRepo.saveAll(bookList);
-	    return "Books saved successfully";
-	 }
+	//End point to add multiple books
+	@PostMapping("/books")
+	public String addBooks(@RequestBody List<Book> bookList){
+	   bookRepo.saveAll(bookList);
+	   return "Books saved successfully";
+	}
 	
+	//End point to delete a book using book ID
 	@DeleteMapping("/book/{id}")
     public String deleteBook(@PathVariable int id) {
+		//get the book using the given ID and delete if found
         return bookRepo.findById(id)
                 .map(book -> {
                     bookRepo.delete(book);
@@ -61,6 +68,7 @@ public class BookController {
                 }).orElseThrow(() -> new NotFoundException("Book with id " + id + " cannot be found"));
     }
 	
+	//End point to edit book details
     @PutMapping("/book/{id}")
     public Book editBook(@PathVariable int id,
                                    @RequestBody Book editedBook) {

@@ -41,7 +41,8 @@ import bookstore.main.repos.CategoryRepository;
 @AutoConfigureMockMvc
 public class RestControllerTest {
 	
-	private static final ObjectMapper om = new ObjectMapper();
+	//To map from object to string for mock request
+	private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,6 +59,7 @@ public class RestControllerTest {
         when(mockRepository.findById(1)).thenReturn(Optional.of(book));
     }
     
+    //Test to see if the end point to return a book using the given ID works correctly
 	@Test
     public void getBookByIDTest() throws Exception {
 
@@ -71,6 +73,7 @@ public class RestControllerTest {
 
     }
 	
+	//Test to check if all the books added are being returned when called the getAllBooks end point
 	@Test
     public void getBooksTest() throws Exception {
 
@@ -93,19 +96,21 @@ public class RestControllerTest {
         verify(mockRepository, times(1)).findAll();
     }
 	
+	//Test to see if a book can be added successfully
     @Test
     public void addBookTest() throws Exception {
 
         Book newBook = new Book(1,"Java Programming", "Javaman");
         when(mockRepository.save(any(Book.class))).thenReturn(newBook);
         mockMvc.perform(post("/api/book")
-                .content(om.writeValueAsString(newBook))
+                .content(objectMapper.writeValueAsString(newBook))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());       
         verify(mockRepository, times(1)).save(any(Book.class));
 
     }
     
+    //Test to see if a category can be successfully assigned to a book
     @Test
     public void addCategoryTest() throws Exception {
     	Book newBook = new Book(1,"Java Programming", "Javaman");
@@ -115,9 +120,9 @@ public class RestControllerTest {
         when(mockRepository1.save(any(Category.class))).thenReturn(category);
        
         mockMvc.perform(post("/api/book")
-                .content(om.writeValueAsString(newBook)));
+                .content(objectMapper.writeValueAsString(newBook)));
         mockMvc.perform(post("/api/book/1/category")
-                .content(om.writeValueAsString(category))
+                .content(objectMapper.writeValueAsString(category))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -125,6 +130,7 @@ public class RestControllerTest {
         verify(mockRepository1, times(1)).save(any(Category.class));
     }
     
+    //Test to see if the correct status is returned when a book is not found
 	@Test
     public void bookNotFoundTest() throws Exception {
         mockMvc.perform(get("/api/book/3")).andExpect(status().isNotFound());
