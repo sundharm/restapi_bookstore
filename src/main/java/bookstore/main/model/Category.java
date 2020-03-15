@@ -18,7 +18,7 @@ public class Category {
 	private String categoryName;
 	
 	//Many to one for bidirectional binding
-	//The tables are joined using book_id column to join category to book
+	//The tables are joined using book_id column to link category to book
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id")
 	@JsonIgnore

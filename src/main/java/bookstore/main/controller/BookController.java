@@ -4,6 +4,7 @@ import bookstore.main.exception.NotFoundException;
 import bookstore.main.model.Book;
 import bookstore.main.repos.BookRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,17 @@ public class BookController {
                     book.setAuthorName(editedBook.getAuthorName());
                     return bookRepo.save(book);
                 }).orElseThrow(() -> new NotFoundException("Book with id " + id + " cannot be found"));
+    }
+    
+    @PostMapping("/deletebooks")
+    public String deleteMultipleBooks(@RequestBody List<Book> bookList) {
+    	
+    	List<Integer> a = new ArrayList<Integer>(); 
+    	for(Book b:bookList) {
+    		a.add(b.getId());
+    	}
+    	bookRepo.deleteByIdIn(a);
+    	return "Deleted successfully";
     }
 
 }
