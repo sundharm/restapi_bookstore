@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,12 +33,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import bookstore.main.RestBookStoreApplication;
 import bookstore.main.model.*;
 import bookstore.main.repos.BookRepository;
+import bookstore.main.repos.CategoryRepository;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class BookControllerTest {
+public class RestControllerTest {
 	
 	private static final ObjectMapper om = new ObjectMapper();
 
@@ -44,6 +48,9 @@ public class BookControllerTest {
 
     @MockBean
     private BookRepository mockRepository;
+    
+    @MockBean
+    private CategoryRepository mockRepository1;
     
     @Before
     public void init() {
@@ -84,6 +91,48 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$[1].authorName", is("Author_2")));
 
         verify(mockRepository, times(1)).findAll();
+    }
+	
+    @Test
+    public void addBookTest() throws Exception {
+
+        Book newBook = new Book(1,"Java Programming", "Javaman");
+        when(mockRepository.save(any(Book.class))).thenReturn(newBook);
+  
+        mockMvc.perform(post("/api/book")
+                .content(om.writeValueAsString(newBook))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        
+        verify(mockRepository, times(1)).save(any(Book.class));
+
+    }
+    
+    @Test
+    public void addCategoryTest() throws Exception {
+    	Book newBook = new Book(1,"Java Programming", "Javaman");
+        when(mockRepository.save(any(Book.class))).thenReturn(newBook);
+        
+        Category category = new Category(1, "cat1");
+        when(mockRepository1.save(any(Category.class))).thenReturn(category);
+        
+        System.out.println(newBook.toString());
+        mockMvc.perform(post("/api/book")
+                .content(om.writeValueAsString(newBook)));
+        
+        mockMvc.perform(post("/api/book/1/category")
+                .content(om.writeValueAsString(category))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.categoryName", is("cat1")));
+        
+        verify(mockRepository1, times(1)).save(any(Category.class));
+    }
+    
+	@Test
+    public void bookNotFoundTest() throws Exception {
+        mockMvc.perform(get("/api/book/3")).andExpect(status().isNotFound());
     }
 
 }

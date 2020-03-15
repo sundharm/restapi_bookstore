@@ -21,8 +21,7 @@ public class Book {
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Category> categories;
 	
-	public Book() {
-		
+	public Book() {	
 	}
 	
 	public Book(int id,String bookName, String authorName) {
