@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -128,6 +130,37 @@ public class RestControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.categoryName", is("cat1")));  	
         verify(mockRepository1, times(1)).save(any(Category.class));
+    }
+    
+    //Test to see if a book can be edited successfully
+    @Test
+    public void editBookTest() throws Exception {
+
+        Book editBook = new Book(1, "editedBook", "editedAuthor");
+        when(mockRepository.save(any(Book.class))).thenReturn(editBook);
+
+        mockMvc.perform(put("/api/book/1")
+                .content(objectMapper.writeValueAsString(editBook))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.bookName", is("editedBook")))
+                .andExpect(jsonPath("$.authorName", is("editedAuthor")));
+
+        verify(mockRepository, times(1)).save(any(Book.class));
+    }
+    
+    //Test to see if a book can be successfully deleted
+    @Test
+    public void deleteBookTest() throws Exception {
+
+        doNothing().when(mockRepository).deleteById(1);
+
+        mockMvc.perform(delete("/api/book/1"))
+			     .andExpect(status().isOk());
+        //to verify if the book has been found to delete
+        verify(mockRepository, times(1)).findById(1);
     }
     
     //Test to see if the correct status is returned when a book is not found
