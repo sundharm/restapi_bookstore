@@ -15,8 +15,10 @@ To Run the application
       
 The application will now run and listen at localhost:8080
 
-The APIs can be tested using Swagger at  (Please check README.docx for more details)
-    http://localhost:8080/swagger-ui.html
+The APIs can be tested using Swagger at
+    http://localhost:8080/swagger-ui.html 
+
+(Please check README.docx for more details)
     
 
 
