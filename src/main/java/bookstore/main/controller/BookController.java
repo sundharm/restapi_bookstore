@@ -81,6 +81,7 @@ public class BookController {
                 }).orElseThrow(() -> new NotFoundException("Book with id " + id + " cannot be found"));
     }
     
+    //Endpoint to delete multiple books
     @PostMapping("/deletebooks")
     public String deleteMultipleBooks(@RequestBody List<Book> bookList) {
     	
